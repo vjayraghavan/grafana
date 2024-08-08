@@ -15,7 +15,7 @@ password = 'admin'
 parser = argparse.ArgumentParser()
 parser.add_argument('-DS', '--datasource',  default=None)
 parser.add_argument('-DF', '--date_from',  default=None)
-parser.add_argument('-DT', '--date_to',  default=None)
+# parser.add_argument('-DT', '--date_to',  default=None)
 parser.add_argument('--uid',         default=None)
 parser.add_argument('--query_name',  help='expr,rawsql', default='expr')
 parser.add_argument('--query',         required=True, help='prometheus_http_response_size_bytes_count')
@@ -23,7 +23,7 @@ args = parser.parse_args()
 
 datasource = args.datasource or os.environ.get('DATASOURCE')
 date_from = args.date_from or os.environ.get('DATE_FROM')
-date_to = args.date_to or os.environ.get('DATE_TO')
+# date_to = args.date_to or os.environ.get('DATE_TO')
 uid = args.uid or os.environ.get('UID')
 query_name = args.query_name
 query = args.query
@@ -48,8 +48,8 @@ def main():
                         'format': 'table', 
                         query_name: query}
                         ],
-            "from": str(convert_timestamp_to_epoch(date_from)),
-            "to": str(convert_timestamp_to_epoch(date_to))
+            "from": str(date_from),
+            "to": 'now'
     }
 
     response = requests.post(url, json = params, headers=headers)
