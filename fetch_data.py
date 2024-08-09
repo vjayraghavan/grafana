@@ -59,13 +59,23 @@ def main():
 
         fields = frame['schema']['fields']
         values =  frame['data']['values']
-        label = f"{fields[1]['labels']['__name__']}{fields[1]['labels']['handler'].replace('/','_')}"
+        if not values:
+            print('DATA RETRIEVED IS EMPTY')
+            return
+        label = f'{fidx}_frame_data'
+        if len(fields) > 1:
+            fname = fields[1].get('labels', {}).get('__name__', '')
+            handler_name = fields[1].get('labels', {}).get('handler', '').replace('/','_')
+            label = f'{fname}{handler_name}' or label
+
+        
+        # label = f"{fields[1]['labels']['__name__']}{fields[1]['labels']['handler'].replace('/','_')}"
 
 
         data_dict = {fields[idx]['name']:convert_to_mapped_type(val, fields[idx]['type']) for idx, val in enumerate(values)}
         df = pd.DataFrame(data_dict)
-        print(data_dict)
         df.to_csv(f'{label}.csv', index = False)
+    print('SAVED TO CSV')
 
 main()
 
